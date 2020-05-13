@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style>
+    .divForm{
+        width: 500px;
+        height: 400px;
+        top: 50%;
+        left: 50%;
+        margin-bottom: 300px;
+        margin-top: 100px;
+        margin-left: 36%;
+    }
+</style>
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>系统设置</cite></a>
+          <a><cite>更换密码</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body divForm">
+        <form class="layui-form layui-form-pane" lay-filter="example" id="example" enctype="multipart/form-data">
+        <div class="layui-form-item">
+            <label class="layui-form-label">旧密码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="old_pass" required lay-verify="required" placeholder="请输入账号旧密码" autocomplete="off"
+                       class="layui-input" id="old_pass">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="new_pass_one" required lay-verify="required" placeholder="请输入新密码" autocomplete="off"
+                       class="layui-input" id="new_pass_one">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认新密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="new_pass_two" required lay-verify="required" placeholder="请确认新密码" autocomplete="off"
+                       class="layui-input" id="new_pass_two">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="sub" type="submit">立即提交</button>
+            </div>
+        </div>
+    </form>
+
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+    <script>
+
+        var form = layui.form;
+      //监听提交
+        form.on('submit(formDemo)', function(data){
+            var data_info = {data:JSON.stringify(data.field)};
+            var $ = layui.jquery;
+
+            function sleep(n) {
+                var start = new Date().getTime();
+                //  console.log('休眠前：' + start);
+                while (true) {
+                    if (new Date().getTime() - start > n) {
+                        break;
+                    }
+                }
+                // console.log('休眠后：' + new Date().getTime());
+            }
+
+            $.ajax({
+				type : 'POST',
+				url : '/admin/change_pass/',
+				data : data_info,
+				dataType : 'json',
+				success : function(data) {
+					// 成功提示框
+                    if (data.code == 0){
+                        layer.msg('修改密码成功!请重新登录！', {
+						icon : 6,
+                        time:1500,
+					}, function () {
+                            layer.close(layer.index);
+                            window.parent.location.reload();
+                        });
+
+                    }else if(data.code == 502){
+                        layer.msg(data.msg, {
+						icon : 5
+					});
+                    }
+
+				},
+				error : function(data) {
+					// 异常提示
+					layer.msg('出现网络故障', {
+						icon : 5
+					});
+					layer.closeAll('iframe'); //关闭弹框
+				}
+			});
+			return false;
+            });
+
+    </script>
+</body>
+</html>

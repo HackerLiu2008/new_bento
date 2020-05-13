@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>LarryBlogCMS-Home</title>
+  <meta name="renderer" content="webkit"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+  <meta name="apple-mobile-web-app-capable" content="yes">  
+  <meta name="format-detection" content="telephone=no"> 
+	<link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" media="all">
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" media="all">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css" media="all">
+    <script src="https://code.highcharts.com.cn/highcharts/highcharts.js"></script>
+    <script src="https://code.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+    <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    <script src="https://code.highcharts.com.cn/highcharts/themes/sand-signika.js"></script>
+</head>
+<body>
+<p>&nbsp;</p>
+<blockquote class="layui-elem-quote">
+                <span id="now_time"></span>
+            </blockquote>
+<section class="larry-wrapper">
+    <!-- overview -->
+	<div class="row state-overview">
+		<div class="col-lg-3 col-sm-6 layui-anim layui-anim-up">
+			<section class="panel">
+				<div class="symbol userblue layui-anim layui-anim-rotate"> <i class="layui-icon layui-icon-layer"></i>
+				</div>
+				<div class="value">
+					<a href="#">
+						<h1 id="count1">{{ card_using }}</h1>
+                        <p>&nbsp;</p>
+					</a>
+					<p>已开卡数量</p>
+				</div>
+			</section>
+		</div>
+		<div class="col-lg-3 col-sm-6 layui-anim layui-anim-up">
+			<section class="panel">
+				<div class="symbol commred layui-anim layui-anim-rotate"> <i class="layui-icon layui-icon-delete"></i>
+				</div>
+				<div class="value">
+					<a href="#">
+						<h1 id="count2">{{ card_destroy }}</h1>
+                        <p>&nbsp;</p>
+					</a>
+					<p>已注销卡数量</p>
+				</div>
+			</section>
+		</div>
+		<div class="col-lg-3 col-sm-6 layui-anim layui-anim-up">
+			<section class="panel">
+				<div class="symbol articlegreen layui-anim layui-anim-rotate">
+					<i class="layui-icon layui-icon-dollar"></i>
+				</div>
+				<div class="value">
+					<a href="#">
+						<h1 id="count3">{{ balance }}</h1>
+                        <p>&nbsp;</p>
+					</a>
+					<p>可用余额</p>
+				</div>
+			</section>
+		</div>
+		<div class="col-lg-3 col-sm-6 layui-anim layui-anim-up">
+			<section class="panel">
+				<div class="symbol rsswet layui-anim layui-anim-rotate">
+					<i class="layui-icon layui-icon-chart-screen"></i>
+				</div>
+				<div class="value">
+					<a href="#">
+						<h1 id="count4">{{ sum_balance }}</h1>
+                        <p>&nbsp;</p>
+					</a>
+					<p>累计充值金额</p>
+				</div>
+			</section>
+		</div>
+	</div>
+	<!-- overview end -->
+	<div class="row">
+		<div class="col-lg-6">
+			<section class="panel">
+				<header class="panel-heading bm0">
+					<span class='span-title'>账户信息概览</span>
+					<span class="tools pull-right"><a href="javascript:;" class="iconpx-chevron-down"></a></span>
+				</header>
+				<div class="panel-body" >
+					<table class="table table-hover personal-task">
+                         <tbody>
+                         	<tr>
+                         		<td>
+                         			<strong>账号</strong>： {{ account }}
+
+                         		</td>
+                         		<td>
+
+                         		</td>
+                         	</tr>
+                         	<tr>
+                         		<td>
+                                <strong>用户名</strong>： {{ name }}
+
+                                </td>
+                                <td></td>
+                         	</tr>
+                         	<tr>
+                         		<td>
+                                <strong>电话</strong>：{{ phone_num }}
+                                </td>
+                                <td></td>
+                         	</tr>
+                         	<tr>
+                         		<td>
+                                <strong>可用余额</strong>：{{ balance }}
+                                </td>
+                                <td></td>
+                         	</tr>
+                         	<tr>
+                         		<td>
+                                <strong>所有卡余额</strong>：{{ card_remain }}
+                                </td>
+                                <td></td>
+                         	</tr>
+                         	<tr>
+                         		<td>
+                                <strong>卡余额统计时间</strong>：{{ remain_time }}
+                                </td>
+                                <td></td>
+                         	</tr>
+                         	<tr>
+                         		<td>
+                                <strong>Decline数量</strong>： 未定义
+                                </td>
+                                <td></td>
+                         	</tr>
+                            <tr>
+                         		<td>
+                                <strong>总交易数量</strong>： 未定义
+                                </td>
+                                <td></td>
+                         	</tr>
+                         	<tr>
+                         		<td>
+                                <strong>总可开卡数量</strong>： {{ card_num }}
+
+                                </td>
+                                <td></td>
+                         	</tr>
+                         	<tr>
+                         		<td>
+                                <strong>累计消费</strong>： <span class="current_user">{{ spend_money }}</span>
+
+                                </td>
+                                <td></td>
+                         	</tr>
+                         <tr>
+                         		<td>
+                                <strong>累计充值</strong>： <span class="current_user">{{ sum_balance }}</span>
+
+                                </td>
+                                <td></td>
+                         	</tr>
+                         </tbody>
+					</table>
+				</div>
+			</section>
+		</div>
+		<div class="col-lg-6">
+		     <!-- 快捷操作 -->
+             <section class="panel">
+                    <div id="container" style="min-width:400px;height:570px"></div>
+             </section>
+		</div>
+	</div>
+
+</section>
+
+<script type="text/javascript" src="/static/layui/layui.js"></script>
+<script type="text/javascript">
+	layui.use(['jquery','layer','element'],function(){
+		window.jQuery = window.$ = layui.jquery;
+		window.layer = layui.layer;
+        window.element = layui.element;
+
+
+       $('.panel .tools .iconpx-chevron-down').click(function(){
+       	   var el = $(this).parents(".panel").children(".panel-body");
+       	   if($(this).hasClass("iconpx-chevron-down")){
+       	   	   $(this).removeClass("iconpx-chevron-down").addClass("iconpx-chevron-up");
+       	   	   el.slideUp(200);
+       	   }else{
+       	   	   $(this).removeClass("iconpx-chevron-up").addClass("iconpx-chevron-down");
+       	   	   el.slideDown(200);
+       	   }
+       })
+
+	});
+</script>
+<script type="text/javascript" src=""></script>
+<script type="text/javascript" src="/static/layui/layui.all.js"></script>
+<script>
+            var newDate = '';
+            getLangDate();
+            //值小于10时，在前面补0
+            function dateFilter(date){
+                if(date < 10){return "0"+date;}
+                return date;
+            }
+            function getLangDate(){
+                var dateObj = new Date(); //表示当前系统时间的Date对象
+                var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+                var month = dateObj.getMonth()+1; //当前系统时间的月份值
+                var date = dateObj.getDate(); //当前系统时间的月份中的日
+                var day = dateObj.getDay(); //当前系统时间中的星期值
+                var weeks = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+                var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串
+                var hour = dateObj.getHours(); //当前系统时间的小时值
+                var minute = dateObj.getMinutes(); //当前系统时间的分钟值
+                var second = dateObj.getSeconds(); //当前系统时间的秒钟值
+                var timeValue = "" +((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午" ); //当前时间属于上午、晚上还是下午
+                newDate = dateFilter(year)+"年"+dateFilter(month)+"月"+dateFilter(date)+"日 "+" "+dateFilter(hour)+":"+dateFilter(minute)+":"+dateFilter(second);
+                document.getElementById("now_time").innerHTML = "亲爱的用户，"+timeValue+"好！ 欢迎使用475440客户端。当前时间为： "+newDate+"　"+week;
+                setTimeout("getLangDate()",1000);
+            }
+            var $ = layui.jquery;
+
+            $.ajax({
+                type: 'GET',
+                url: '/user/line_chart/',
+                dataType: 'json',
+                success: function (data) {
+                    // 成功提示框
+                    if (data.code == 0) {
+                        var column = data.column,
+                            xax = data.xAx,
+                            xaxis = [{categories: xax, crosshair: true}],
+                            series = data.data;
+                        var chart = Highcharts.chart('container', {
+                        chart: {
+                            zoomType: 'xy'
+                        },
+                        title: {
+                            text: '近30天开卡和充值预览'
+                        },
+                        subtitle: {
+                            text: '不包含今日'
+                        },
+                        credits: {
+                            enabled: false//不显示LOGO
+                        },
+                        xAxis: xaxis,
+
+                        yAxis: [{ // Primary yAxis
+                            labels: {
+                                format: '{value} 张',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            },
+                            title: {
+                                text: '开卡数量',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            }
+                        }, { // Secondary yAxis
+                            title: {
+                                text: '充值金额',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            labels: {
+                                format: '{value} $',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            opposite: true
+                        }],
+                        tooltip: {
+                            shared: true
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'left',
+                            x: 120,
+                            verticalAlign: 'top',
+                            y: 100,
+                            floating: true,
+                            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                        },
+                        series: series
+                    });
+                    } else if (data.code == 502) {
+                        parent.layer.msg(data.msg, {
+                            icon: 5
+                        });
+                    }
+
+                },
+                error: function (data) {
+                    // 异常提示
+                    parent.layer.msg('折线图接口', {
+                        icon: 5
+                    });
+                }
+                });
+
+        function showNotice(){
+            sessionStorage.setItem("showNotice","true");
+            layer.open({
+                type: 2,
+                title: "475440系统公告",
+                area: ['350px', '450px'],
+                shade: 0.8,
+                skin: "layui-layer-molv",
+                id: 'LAY_layuipro',
+                btn: ['我知道了'],
+                moveType: 1,
+                content: '/user/notice/',
+                success: function(layero){
+                    var btn = layero.find('.layui-layer-btn');
+                    btn.css('text-align', 'center');
+                    btn.on("click",function(){
+                        tipsShow();
+                    });
+                },
+                cancel: function(index, layero){
+                    tipsShow();
+                }
+            });
+        }
+
+        function show_notice(){
+            var status = sessionStorage.getItem('showNotice');
+            if (status=='true'){
+            }else{
+                showNotice()
+            }
+        }
+        show_notice();
+        </script>
+</body>
+</html>

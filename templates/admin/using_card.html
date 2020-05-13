@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>卡信息</cite></a>
+          <a><cite>信息列表</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body">
+
+        <form class="layui-form x-center" action="" lay-filter="example" id="example">
+            <div class="demoTable">
+                 <div class="layui-form-item">
+                     <div class="layui-inline">
+                      <label class="layui-form-label">搜索项</label>
+                      <div class="layui-input-inline">
+                        <select name="modules" lay-verify="required" lay-search="" id="field">
+                          <option value="">选择搜索条件</option>
+                          <option value="card_no">卡号</option>
+                          <option value="last_card_no">卡号后4位</option>
+			              <option value="card_name">卡名</option>
+                            <option value="account_no">持有人</option>
+                        </select>
+                      </div>
+                     </div>
+                 <div class="layui-inline">
+
+                     <input type="text" id="value" name="value" placeholder="搜索条件对应的值" autocomplete="off"
+                           class="layui-input">
+
+                 </div>
+                 <div class="layui-inline">
+                     <button class="layui-btn search_btn" type="button"><i class="layui-icon layui-icon-search"></i></button>
+                 </div>
+                     <div class="layui-inline">
+                     <input type="radio" name="card_status" value="show" lay-filter="card_status" title="显示全部卡">
+                     <input type="radio" name="card_status" value="hide" lay-filter="card_status" title="不显示注销卡" checked >
+                     </div>
+                 </div>
+            </div>
+          </form>
+
+        <table class="layui-show" id="card_all" lay-filter="card_all"></table>
+
+
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+    <script>
+        var table = layui.table,
+            form = layui.form,
+            $ = layui.jquery;
+
+        var card_status= $('input[name="card_status"]:checked').val();
+
+        table.render({
+            elem: '#card_all'
+            , height: 'full-250'
+            , cellMinWidth: '80'
+            , url: '/admin/card_all/?card_status='+card_status //数据接口
+            , title: '卡信息'
+            , toolbar: '#toolbarDemo'
+            , limit: 50
+            , limits: [50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
+            , totalRow: true //开启合计行
+            , cols: [[ //表头
+                {type: 'numbers'}
+                , {field: 'card_number', title: '卡号', align: 'center'}
+                , {field: 'card_id', title: '卡ID', align: 'center'}
+                , {field: 'create_time', title: '激活时间', align: 'center'}
+                , {field: 'alias', title: '卡姓名', align: 'center'}
+                , {field: 'label', title: '标签', align: 'center'}
+                , {field: 'card_validity', title: '有效期', align: 'center', }
+                , {field: 'card_cvv', title: '安全码', align: 'center',}
+                , {field: 'card_status', title: '状态', align: 'center', }
+                , {field: 'name', title: '持有人', align: 'center',}
+            ]]
+            , id: 'card_all'
+            , page: true
+        });
+
+
+        form.on('radio(card_status)', function (data) {
+    　　　　if (data.value == 'show'){
+                table.reload("card_all", {
+                    url:'/admin/card_all/?card_status=show',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                return false;
+            } else if (data.value == 'hide'){
+                table.reload("card_all", {
+                    url:'/admin/card_all/?card_status=hide',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                return false;
+            }
+　　　  });
+
+
+        $(".search_btn").on("click",function(){
+            var field = $('#field').val(),
+                value = $('#value').val();
+            table.reload("card_all", {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }, where: {
+                    field: field,
+                    value: value,
+                }
+            }, '/admin/card_all/');
+            return false;
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>475440 后台管理</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="/static/image/admin_ico.ico" type="image/x-icon" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header header header-demo">
+    <div class="layui-main">
+    <div class="admin-logo-box">
+				<a class="logo" href="/admin/" title="logo">475440 管理</a>
+				<div class="larry-side-menu">
+					<i class="layui-icon layui-icon-shrink-right" aria-hidden="true"></i>
+				</div>
+			</div>
+            <ul class="layui-nav layui-layout-left layui-ygyd-menu" style="position:absolute; left:250px;">
+                <!--
+              <li class="layui-nav-item"><a href="">合作机构</a></li>
+              <li class="layui-nav-item"><a href="javascript:;">订单管理</a></li>
+              <li class="layui-nav-item"><a href="">统计报表</a></li>
+              <li class="layui-nav-item">
+                <a href="javascript:;">系统管理</a>
+                <dl class="layui-nav-child">
+                  <dd><a href="">角色管理</a></dd>
+                  <dd><a href="">权限设置</a></dd>
+                  <dd><a href="">日志管理</a></dd>
+                </dl>
+              </li>
+              -->
+    </ul>
+
+      <ul class="layui-nav" lay-filter="">
+      <!-- <li class="layui-nav-item">
+                        <a href="" title="消息">
+                            <i class="layui-icon" style="top: 1px;">&#xe63a;</i>
+                        </a>
+                        </li> -->
+        <li class="layui-nav-item"><img src="/static/image/admin_logo.png" class="layui-circle" style="border: 2px solid #A9B7B7;" width="35px" alt=""></li>
+        <li class="layui-nav-item"> <a href="javascript:;">admin</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a href="/admin/logout">退出</a></dd>
+          </dl>
+        </li>
+        <!-- <li class="layui-nav-item x-index"><a href="/">前台首页</a></li> -->
+      </ul>
+    </div>
+  </div>
+  <div class="layui-side layui-bg-cyan x-side" style="left:-200px;">
+    <div class="layui-side-scroll">
+      <ul class="layui-nav layui-nav-tree site-demo-nav" lay-filter="side">
+        <li class="layui-nav-item">
+            <a class="" href="javascript:;"><i class="layui-icon layui-icon-group" style="top: 3px;"></i><cite>用户信息</cite> </a>
+          <dl class="layui-nav-child ">
+              <dd class="">
+            <dd class=""><a href="javascript:;" _href="/admin/user/"> <cite>客户信息</cite> </a> </dd>
+              <dd class="">
+            <dd class=""><a href="javascript:;" _href="/admin/add_user/"> <cite>添加客户</cite> </a> </dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"> <a class="javascript:;" href="javascript:;"> <i class="layui-icon layui-icon-cart" style="top: 3px;"></i><cite>用户记录</cite> </a>
+          <dl class="layui-nav-child">
+            <dd class="">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=user-top-list.html"> <cite>账户充值</cite> </a> </dd>
+            <dd class="">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=user-trans.html"> <cite>账户消费</cite> </a> </dd>
+            <dd class="">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=user-refund.html"> <cite>退款记录</cite> </a> </dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"> <a class="javascript:;" href="javascript:;"> <i class="layui-icon layui-icon-user" style="top: 3px;"></i><cite>中介管理</cite> </a>
+          <dl class="layui-nav-child">
+            <dd class="">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=middle-list.html"> <cite>中介管理</cite> </a> </dd>
+              <dd class="">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=middle-money.html"> <cite>中介提成</cite> </a> </dd>
+              <dd class="">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=middle-add.html"> <cite>新增中介</cite> </a> </dd>
+            </dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"> <a class="javascript:;" href="javascript:;"> <i class="layui-icon layui-icon-template-1" style="top: 3px;"></i><cite>卡信息</cite> </a>
+          <dl class="layui-nav-child">
+            <dd class="">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=using_card.html"> <cite>已用卡信息</cite> </a> </dd>
+              <dd class="">
+              <!--
+              <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=new_card.html"> <cite>未用卡信息</cite> </a> </dd>
+              -->
+            </dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"> <a class="javascript:;" href="javascript:;"> <i class="layui-icon layui-icon-fonts-del" style="top: 3px;"></i><cite>Decline记录</cite> </a>
+          <dl class="layui-nav-child">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=decline.html"> <cite>decline记录</cite> </a> </dd>
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=decline-proportion.html"> <cite>decline比例</cite> </a> </dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"> <a class="javascript:;" href="javascript:;"> <i class="layui-icon layui-icon-cart-simple" style="top: 3px;"></i><cite>卡消费记录</cite> </a>
+          <dl class="layui-nav-child">
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=card-trans.html"> <cite>卡消费记录</cite> </a> </dd>
+          </dl>
+        </li>
+          <li class="layui-nav-item"> <a class="javascript:;" href="javascript:;"> <i class="layui-icon layui-icon-set-fill" style="top: 3px;"></i><cite>系统设置</cite> </a>
+          <dl class="layui-nav-child">
+            <dd class=""> <a href="javascript:;" _href="/admin/notice_edit/"> <cite>公告设置</cite> </a> </dd>
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=admin-edit.html"> <cite>更换密码</cite> </a> </dd>
+            <dd class=""> <a href="javascript:;" _href="/admin/ex_change/"> <cite>汇率配置</cite> </a> </dd>
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=qr-code.html"> <cite>收款码配置</cite> </a> </dd>
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=bank-info.html"> <cite>银行卡配置</cite> </a> </dd>
+            <dd class=""> <a href="javascript:;" _href="/admin/templates/?name=top-msg.html"> <cite>充值通知</cite> </a> </dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item" style="height: 30px; text-align: center"> </li>
+      </ul>
+    </div>
+  </div>
+  <div class="layui-tab layui-tab-card site-demo-title x-main" lay-filter="x-tab" lay-allowclose="true" style="left: 0px;border-left: solid 2px #2299ee;">
+    <ul class="layui-tab-title">
+      <li class="layui-this layui-icon layui-icon-home"> 主页 <i class="layui-icon layui-unselect layui-tab-close">ဆ</i> </li>
+    </ul>
+    <div class="layui-tab-content site-demo site-demo-body">
+      <div class="layui-tab-item layui-show">
+        <iframe frameborder="0" src="/admin/main/" class="x-iframe"></iframe>
+      </div>
+    </div>
+  </div>
+  <div class="site-mobile-shade"> </div>
+</div>
+<script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+<script src="/static/js/x-admin.js"></script>
+</body>
+</html>

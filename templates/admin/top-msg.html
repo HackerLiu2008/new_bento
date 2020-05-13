@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>系统设置</cite></a>
+          <a><cite>充值通知</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body">
+
+        <table class="layui-hide" id="top_msg" lay-filter="top_msg"></table>
+        <hr class="layui-bg-gray">
+        <div id="details" style="padding: 20px;" lay-filter="detail">
+        <form class="layui-form" lay-filter="example" id="example" enctype="multipart/form-data">
+            <div class="layui-form-item">
+                <label class="layui-form-label">通知人:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="top_people"  placeholder="通知的人名" autocomplete="off"
+                           class="layui-input" id="top_people">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮  箱:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" placeholder="推送的邮箱" autocomplete="off"
+                           class="layui-input" id="email">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="sub" type="submit">立即提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+        <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function(){
+        var form = layui.form,
+            table = layui.table,
+            $ = layui.jquery;
+
+
+        table.render({
+                elem: '#top_msg'
+                , height: 'full-450'
+                , cellMinWidth: '80'
+                , url: '/admin/top_msg_table/' //数据接口
+                , title: '收款码信息'
+                , skin: 'line'
+                , toolbar: false
+                , cols: [[ //表头
+                    {type:'numbers'}
+                    , {field: 'user', title: '收件人姓名', align: 'center',}
+                    , {field: 'email', title: '收件邮箱', align: 'center', }
+                    , {fixed: 'right', width: 250, align: 'center', toolbar: '#barDemo'}
+                ]]
+                , id: 'qr_code'
+            });
+
+        table.on('tool(top_msg)', function (obj) {
+            var data = obj.data
+                , layEvent = obj.event;
+
+            if (layEvent === 'del') {
+                layer.confirm('确认删除这个收件人?', function (index) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/del_email/?user=' + data.user,
+                    dataType: 'json',
+                    success: function (data) {
+                        // 成功提示框
+                        if (data.code == 0) {
+                            layer.msg(data.msg, {
+                                icon: 6,time:1000
+                            });
+                            location.reload()
+                        } else if (data.code == 502) {
+                            layer.msg(data.msg, {
+                                icon: 5
+                            });
+                        }
+
+                    },
+                    error: function (data) {
+                        // 异常提示
+                        layer.msg('出现网络故障', {
+                            icon: 2
+                        });
+                    }
+                });
+                })
+            } else if (layEvent === 'edit'){
+                layer.prompt({title: '请输入新的邮箱', value:data.email}, function(num, index){
+
+                        $.ajax({
+                            type : 'POST',
+                            url : '/admin/edit_email/',
+                            data : {user:data.user,
+                                    email:num
+                            },
+                            dataType : 'json',
+                            beforeSend:function () {
+                            layer.load(2, {shade: false})
+                            },
+                            success : function(data) {
+                                // 成功提示框
+                                if (data.code == 0){
+                                    layer.closeAll();
+                                    layer.msg(data.msg, {
+                                    icon : 6,
+                                });
+                                location.reload()
+                                }else if(data.code == 502){
+                                    layer.closeAll();
+                                    layer.msg(data.msg, {
+                                    icon : 5
+                                });
+                                }
+
+                            }
+                        });
+                    layer.close(index);
+
+                });
+            }
+        });
+
+      //监听提交
+        form.on('submit(formDemo)', function(data){
+            var data_info = {data:JSON.stringify(data.field)};
+            var $ = layui.jquery;
+
+            $.ajax({
+				type : 'POST',
+				url : '/admin/top_msg/',
+				data : data_info,
+				dataType : 'json',
+				success : function(data) {
+					// 成功提示框
+                    if (data.code == 0){
+                        layer.msg(data.msg, {
+						icon : 6,
+					});
+					layer.closeAll('iframe'); //关闭弹框
+                    }else if(data.code == 502){
+                        layer.msg(data.msg, {
+						icon : 5
+					});
+                    }
+				},
+				error : function(data) {
+					// 异常提示
+					layer.msg('出现网络故障', {
+						icon : 5
+					});
+					parent.layer.closeAll('iframe'); //关闭弹框
+				}
+			});
+			return false;
+            });
+    });
+</script>
+</body>
+</html>

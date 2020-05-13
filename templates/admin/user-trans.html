@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>用户记录</cite></a>
+          <a><cite>用户消费信息</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body">
+
+        <form class="layui-form x-center" action="" lay-filter="example" id="example">
+              客  户
+            <div class="layui-inline">
+                <input class="layui-input" name="cus_name" id="cus_name" autocomplete="off" placeholder="输入用户名">
+            </div>
+            卡  号
+            <div class="layui-inline">
+                <input type="number" class="layui-input" name="trans_card" id="trans_card" autocomplete="off" placeholder="输入卡号">
+            </div>
+            卡  名
+            <div class="layui-inline">
+                <input type="text"  class="layui-input" name="card_name" id="card_name" autocomplete="off" placeholder="输入卡名">
+            </div>
+            时间范围
+            <div class="layui-inline">
+            <input type="text" class="layui-input" id="test8" autocomplete="off" placeholder="选择时间范围">
+        </div>
+              操作类型
+              <div class="layui-inline">
+                  <select name="interest" lay-filter="aihao" id="bento_do_type">
+                    <option value=""></option>
+                    <option value="开卡">开卡</option>
+                    <option value="充值">充值</option>
+                    <option value="退款">退款</option>
+                    <option value="删卡">删卡</option>
+                    <option value="系统扣费">系统扣费</option>
+                  </select>
+              </div>
+
+        <button class="layui-btn search_btn" type="button"><i class="layui-icon layui-icon-search"></i></button>
+        </form>
+        <table class="layui-hide" id="cus_trans_log" lay-filter="cus_trans_log"></table>
+
+
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+    <script>
+        var laydate = layui.laydate,
+            table = layui.table,
+            $ = layui.jquery;
+
+        laydate.render({
+            elem: '#test8'
+            , range: true
+        });
+
+        table.render({
+            elem: '#cus_trans_log'
+            , height: 'full-220'
+            , cellMinWidth: '40'
+            , url: '/admin/user_trans/' //数据接口
+            , title: '客户交易记录'
+            , skin: 'line'
+            , evens: true
+            , limit: 50
+            , limits: [50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
+            , toolbar: "true" //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , totalRow: true //开启合计行
+            , cols: [[ //表头
+                {type: 'numbers'}
+                , {field: 'cus_name', title: '客户', align: 'center', totalRowText: '合计：'}
+                , {field: 'date', title: '操作日期', align: 'center',}
+                {#, {field: 'trans_type', title: '交易类型', align: 'center',}#}
+                , {field: 'do_type', title: '操作类型', align: 'center',}
+                , {field: 'card_name', title: '卡名', align: 'center',}
+                , {field: 'card_no', title: '卡号', align: 'center', }
+                , {field: 'do_money', title: '操作金额', align: 'center', totalRow: true, sort: true, style: "color: red"}
+                //, {field: 'hand_money', title: '手续费', align: 'center', totalRow: true, sort: true}
+                , {field: 'before_balance', title: '之前余额', align: 'center'}
+                , {field: 'balance', title: '之后余额', align: 'center'}
+            ]]
+            , id: 'cus_trans_log'
+            , page: true
+        });
+
+        $(".search_btn").on("click",function(){
+            var cus_name = $("#cus_name").val(),
+                trans_card = $('#trans_card').val(),
+                trans_type = $('#trans_type').val(),
+                trans_do_type = $('#bento_do_type').val(),
+                time_range = $('#test8').val(),
+                card_name = $('#card_name').val();
+            table.reload("cus_trans_log", {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }, where: {
+                    cus_name: cus_name,
+                    trans_card: trans_card,
+                    time_range: time_range,
+                    trans_type: trans_type,
+                    trans_do_type: trans_do_type,
+                    card_name: card_name,
+                }
+            }, '/admin/account_trans/');
+            return false;
+        });
+
+
+    </script>
+</body>
+</html>

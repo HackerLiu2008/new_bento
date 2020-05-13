@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style>
+        .divForm{
+            width: 500px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            margin-bottom: 300px;
+            margin-top: 100px;
+            margin-left: 36%;
+        }
+    </style>
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>中介管理</cite></a>
+          <a><cite>新增中介</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body">
+
+        <div class="divForm">
+                    <form class="layui-form layui-form-pane" lay-filter=""  enctype="multipart/form-data">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">姓   名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="name" required lay-verify="required" placeholder="客户姓名" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">账   号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="account" required lay-verify="required" placeholder="客户登录账号" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密   码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="password" placeholder="客户登录密码" required lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">电   话</label>
+                            <div class="layui-input-inline">
+                                <input type="number" name="phone_num" placeholder="接收短息通知号码"  autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">0-3个客户</label>
+                            <div class="layui-input-inline">
+                                <input type="number" name="price_one" placeholder="开一张卡中介多少钱" required lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">4-6个客户</label>
+                            <div class="layui-input-inline">
+                                <input type="number" name="price_two" placeholder="开一张卡中介多少钱" required lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">7个以上客户</label>
+                            <div class="layui-input-inline">
+                                <input type="number" name="price_three" placeholder="开一张卡中介多少钱" required lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button  class="layui-btn layui-btn-lg" lay-submit="" lay-filter="add_middle" type="submit">确认</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+    <script>
+        var form = layui.form,
+            layer = layui.layer;
+
+        form.on('submit(add_middle)', function (data) {
+            var data_info = {data: JSON.stringify(data.field)};
+            var $ = layui.jquery;
+            $.ajax({
+                type: 'POST',
+                url: '/admin/add_middle/',
+                data: data_info,
+                dataType: 'json',
+                success: function (data) {
+                    // 成功提示框
+                    if (data.code == 0) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                        });
+                    } else if (data.code == 502) {
+                        layer.msg(data.msg, {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function (data) {
+                    // 异常提示
+                    layer.msg('出现网络故障!', {
+                        icon: 5
+                    });
+                    layer.closeAll('iframe'); //关闭弹框
+                }
+            });
+            return false;
+        });
+    </script>
+</body>
+</html>

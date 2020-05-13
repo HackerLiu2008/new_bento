@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+        <link rel="stylesheet" href="/static/lib/bootstrap/css/bootstrap.css" media="all">
+        <script src="https://code.highcharts.com.cn/highcharts/highcharts.js"></script>
+        <script src="https://code.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+        <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+        <script src="https://code.highcharts.com.cn/highcharts/themes/sand-signika.js"></script>
+    </head>
+    <body>
+    <style type="text/css">
+	legend { display: block; width:100px; border-bottom:0px; font-family: "Microsoft YaHei","Helvetica Neue";}
+	legend a{ color:#666;} legend a:hover{ text-decoration:none;}
+	.layui-table{ font-family: "Microsoft YaHei","Helvetica Neue";}
+	</style>
+        <div class="x-body">
+            <blockquote class="layui-elem-quote">
+                <span id="now_time"></span>
+            </blockquote>
+        <div class="row">
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <section class="panel">
+                    <div class="symbol bgcolor-blue"> <i class="fa layui-icon layui-icon-group"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="用户人数"><i class="iconfont " data-icon=""></i>
+                            <h1>{{ user_count }}</h1>
+                        </a>
+
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="用户人数"> <i class="iconfont " data-icon=""></i><span>用户人数</span></a>
+
+                    </div>
+                </section>
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <section class="panel">
+                    <div class="symbol bgcolor-commred"> <i class="fa layui-icon layui-icon-template-1"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="已开卡数量"> <i class="iconfont " data-icon=""></i>
+                            <h1>{{ card_use }}</h1>
+                        </a>
+
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="已开卡数量"> <i class="iconfont " data-icon=""></i><span>已开卡数量</span></a>
+
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <section class="panel">
+                    <div class="symbol bgcolor-dark-green"> <i class="fa layui-icon layui-icon-template-1"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="已注销数量"> <i class="iconfont " data-icon=""></i>
+                            <h1>{{ card_logout }}</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="已注销数量"> <i class="iconfont " data-icon=""></i><span>已注销数量</span></a>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <section class="panel">
+                    <div class="symbol bgcolor-yellow-green"> <i class="fa layui-icon layui-icon-dollar"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="用户总充值"> <i class="iconfont " data-icon=""></i>
+                            <h1>{{ sum_top }}</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="用户总充值"> <i class="iconfont " data-icon=""></i><span>用户总充值</span></a>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <section class="panel">
+                    <div class="symbol" style="background-color: #4f46a5"> <i class="fa layui-icon layui-icon-dollar"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="用户总余额"> <i class="iconfont " data-icon=""></i>
+                            <h1>{{ sum_balance }}</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="用户总余额"> <i class="iconfont " data-icon=""></i><span>用户总余额</span></a>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <section class="panel">
+                    <div class="symbol" style="background-color: #b92c28"> <i class="fa layui-icon layui-icon-dollar"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="卡总余额"> <i class="iconfont " data-icon=""></i>
+                            <h1>{{ card_remain }}</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="卡总余额"> <i class="iconfont " data-icon=""></i><span>卡总余额</span></a>
+                        <a href="javascript:;"><i></i><span>{{ up_time }}</span></a>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+            
+            <fieldset class="layui-elem-field layui-field-title site-title">
+              <legend><a name="default">信息概览</a></legend>
+            </fieldset>
+             
+        <!--相关统计-->
+        <div class="row">
+        <div class="col-sm-6" style="width: 100%">
+         <section class="panel">
+                    <div class="panel-heading">账户充值开卡预览</div>
+                    <div id="container" style="min-width:400px;height:570px"></div>
+                </section>
+        </div>
+        </div>
+
+    
+        <script src="/static/layui/layui.js" charset="utf-8"></script>
+        <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+        <script src="/static/js/echarts.min.js"></script>
+        <script>
+            var newDate = '';
+            getLangDate();
+            //值小于10时，在前面补0
+            function dateFilter(date){
+                if(date < 10){return "0"+date;}
+                return date;
+            }
+            function getLangDate(){
+                var dateObj = new Date(); //表示当前系统时间的Date对象
+                var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+                var month = dateObj.getMonth()+1; //当前系统时间的月份值
+                var date = dateObj.getDate(); //当前系统时间的月份中的日
+                var day = dateObj.getDay(); //当前系统时间中的星期值
+                var weeks = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+                var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串
+                var hour = dateObj.getHours(); //当前系统时间的小时值
+                var minute = dateObj.getMinutes(); //当前系统时间的分钟值
+                var second = dateObj.getSeconds(); //当前系统时间的秒钟值
+                var timeValue = "" +((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午" ); //当前时间属于上午、晚上还是下午
+                newDate = dateFilter(year)+"年"+dateFilter(month)+"月"+dateFilter(date)+"日 "+" "+dateFilter(hour)+":"+dateFilter(minute)+":"+dateFilter(second);
+                document.getElementById("now_time").innerHTML = "亲爱的管理员，"+timeValue+"好！ 欢迎使用475440后台管理。当前时间为： "+newDate+"　"+week;
+                setTimeout("getLangDate()",1000);
+            }
+        </script>
+
+            <script>
+            var newDate = '';
+            getLangDate();
+            //值小于10时，在前面补0
+            function dateFilter(date){
+                if(date < 10){return "0"+date;}
+                return date;
+            }
+            function getLangDate(){
+                var dateObj = new Date(); //表示当前系统时间的Date对象
+                var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+                var month = dateObj.getMonth()+1; //当前系统时间的月份值
+                var date = dateObj.getDate(); //当前系统时间的月份中的日
+                var day = dateObj.getDay(); //当前系统时间中的星期值
+                var weeks = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+                var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串
+                var hour = dateObj.getHours(); //当前系统时间的小时值
+                var minute = dateObj.getMinutes(); //当前系统时间的分钟值
+                var second = dateObj.getSeconds(); //当前系统时间的秒钟值
+                var timeValue = "" +((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午" ); //当前时间属于上午、晚上还是下午
+                newDate = dateFilter(year)+"年"+dateFilter(month)+"月"+dateFilter(date)+"日 "+" "+dateFilter(hour)+":"+dateFilter(minute)+":"+dateFilter(second);
+                document.getElementById("now_time").innerHTML = "亲爱的用户，"+timeValue+"好！ 欢迎使用475440客户端。当前时间为： "+newDate+"　"+week;
+                setTimeout("getLangDate()",1000);
+            }
+            var $ = layui.jquery;
+
+            $.ajax({
+                type: 'GET',
+                url: '/admin/line_chart/',
+                dataType: 'json',
+                success: function (data) {
+                    // 成功提示框
+                    if (data.code == 0) {
+                        var column = data.column,
+                            xax = data.xAx,
+                            xaxis = [{categories: xax, crosshair: true}],
+                            series = data.data;
+                        var chart = Highcharts.chart('container', {
+                        chart: {
+                            zoomType: 'xy'
+                        },
+                        title: {
+                            text: '近30天账户充值开卡预览'
+                        },
+                        subtitle: {
+                            text: '不包含今日'
+                        },
+                        credits: {
+                            enabled: false//不显示LOGO
+                        },
+                        xAxis: xaxis,
+
+                        yAxis: [{ // Primary yAxis
+                            labels: {
+                                format: '{value} 张',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            },
+                            title: {
+                                text: '开卡数量',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            }
+                        }, { // Secondary yAxis
+                            title: {
+                                text: '充值金额',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            labels: {
+                                format: '{value} $',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            opposite: true
+                        }],
+                        tooltip: {
+                            shared: true
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'left',
+                            x: 120,
+                            verticalAlign: 'top',
+                            y: 100,
+                            floating: true,
+                            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                        },
+                        series: series
+                    });
+                    } else if (data.code == 502) {
+                        parent.layer.msg(data.msg, {
+                            icon: 5
+                        });
+                    }
+
+                },
+                error: function (data) {
+                    // 异常提示
+                    parent.layer.msg('折线图接口', {
+                        icon: 5
+                    });
+                }
+                });
+        </script>
+
+            
+        </div>
+        <div class="layui-footer footer footer-demo">
+            <div class="layui-main">
+                <p>
+                    <a href="/">
+                        Copyright ©2020
+                    </a>
+                </p>
+                
+            </div>
+        </div>
+        
+    </body>
+</html>

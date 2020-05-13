@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>中介管理</cite></a>
+          <a><cite>中介信息</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body">
+
+        <tablse class="layui-hide" id="middle_info" lay-filter="middle_info"></tablse>
+        <script type="text/html" id="middle_bar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="mid_edit"><i class="layui-icon layui-icon-survey"></i>编辑</a>
+        </script>
+
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+    <script>
+        var table = layui.table;
+
+
+        table.render({
+            elem: '#middle_info'
+            , height: 'full-180'
+            , cellMinWidth: '80'
+            , url: '/admin/middle_info/' //数据接口
+            , title: '中介信息'
+            , limit: 20
+            , toolbar: "true" //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , totalRow: true //开启合计行
+            , cols: [[ //表头
+                {type: 'numbers'}
+                , {field: 'name', title: '中介名', align: 'center',totalRowText: '合计：'}
+                , {field: 'cus_num', title: '客户数量', align: 'center', sort: true,}
+                , {field: 'account', title: '账号', align: 'center',}
+                , {field: 'password', title: '密码', align: 'center',}
+                , {field: 'phone_num', title: '电话', align: 'center',}
+                , {field: 'price_one', title: '0-3客户量', align: 'center', sort: true}
+                , {field: 'price_two', title: '4-6客户量', align: 'center', sort: true}
+                , {field: 'price_three', title: '7以上客户量', align: 'center', sort: true}
+                , {fixed: 'right', width: 220, align: 'center', toolbar: '#middle_bar'}
+            ]]
+            , id: 'pay_history'
+            , page: true
+        });
+
+
+        table.on('tool(middle_info)', function (obj) {
+            var data = obj.data
+                , layEvent = obj.event;
+
+            if (layEvent === 'mid_edit') {
+                layui.layer.open({
+                    title: '修改中介为 [ ' + data.name + ' ] 的相关信息',
+                    type: 2,
+                    anim: 3,
+                    area: ['40%', '70%'],//宽高
+                    shadeClose: true, //点击遮罩关闭
+                    content: '/admin/acc_to_middle/?middle_id='+data.middle_id,
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#name").val(data.name)
+                    }
+                });
+            }
+        });
+
+
+
+    </script>
+</body>
+</html>

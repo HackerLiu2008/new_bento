@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<style>
+    .divForm{
+        width: 500px;
+        height: 400px;
+        top: 50%;
+        left: 50%;
+        margin-bottom: 300px;
+        margin-top: 100px;
+        margin-left: 36%;
+    }
+</style>
+<body>
+
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+      <a><cite>首页</cite></a>
+      <a><cite>用户信息</cite></a>
+      <a><cite>添加用户</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+</div>
+
+<div class="divForm">
+    <form class="layui-form layui-form-pane" lay-filter=""  enctype="multipart/form-data">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓   名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" required lay-verify="required" placeholder="客户姓名" autocomplete="off"
+                       class="layui-input"  id="name">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">账   号</label>
+            <div class="layui-input-inline">
+                <input type="text" id="account" name="account" required lay-verify="required" placeholder="客户登录账号" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">密   码</label>
+            <div class="layui-input-inline">
+                <input type="text" id="password" name="password" placeholder="客户登录密码" required lay-verify="required" autocomplete="off"
+                       class="layui-input"  readonly="readonly" value="456456">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">电   话</label>
+            <div class="layui-input-inline">
+                <input type="number" id="phone_num" name="phone_num" placeholder="接收短息通知号码"  autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">开 卡 费</label>
+            <div class="layui-input-inline">
+                <input type="number" id="create_price" name="create_price" placeholder="开卡费" required lay-verify="required" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">最低充值</label>
+            <div class="layui-input-inline">
+                <input type="number" id="min_top" name="min_top" placeholder="最低充值到卡的金额" required lay-verify="required" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+   <!--
+        <div class="layui-form-item">
+            <label class="layui-form-label">最高充值金额</label>
+            <div class="layui-input-inline">
+                <input type="number" id="max_top" name="max_top" placeholder="最高充值到卡的金额" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+    -->
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">开卡数量  </label>
+            <div class="layui-input-inline">
+                <input type="number" id="card_num" name="card_num" placeholder="开卡数量" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">中介名称  </label>
+            <div class="layui-input-inline">
+                <select name="middle_name" lay-search="">
+                    <option value="">直接选择或搜索选择</option>
+                    {% for i in middle_name %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                    </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button  class="layui-btn layui-btn-lg" lay-submit="" lay-filter="formDemo" type="submit">确认</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/static/layui/layui.all.js" charset="utf-8"></script>
+<script>
+    var form = layui.form,
+        $ = layui.jquery;
+        layer = layui.layer;
+
+    form.on('submit(formDemo)', function (data) {
+            var data_info = {data: JSON.stringify(data.field)};
+            $.ajax({
+                type: 'POST',
+                url: '/admin/add_user/',
+                data: data_info,
+                dataType: 'json',
+                success: function (data) {
+                    // 成功提示框
+                    if (data.code == 0) {
+                        layer.msg(data.msg, {
+                            icon: 1,
+                        });
+                    } else if (data.code == 502) {
+                        layer.msg(data.msg, {
+                            icon: 2
+                        });
+                    }
+                },
+                error: function (data) {
+                    // 异常提示
+                    parent.layer.msg('出现网络故障', {
+                        icon: 5
+                    });
+                    parent.layer.closeAll('iframe'); //关闭弹框
+                }
+            });
+            return false;
+        });
+
+</script>
+</body>
+</html>

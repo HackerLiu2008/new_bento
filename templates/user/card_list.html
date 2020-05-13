@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>所有卡信息</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body">
+
+
+        <form class="layui-form x-center" action="" lay-filter="example">
+            <div class="demoTable">
+                卡名：
+            <div class="layui-inline">
+                <input class="layui-input" name="card_name" id="card_name" autocomplete="off">
+            </div>
+                卡号:
+            <div class="layui-inline">
+                <input type="number"  class="layui-input" name="card_num" id="card_num"  autocomplete="off">
+            </div>
+                标签:
+            <div class="layui-inline">
+                <input class="layui-input" name="label" id="label" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload" id="sub_card">搜索</button>
+
+             <div class="layui-inline">
+                 <input type="radio" name="card_status" value="show" lay-filter="card_status" title="显示全部卡">
+                 <input type="radio" name="card_status" value="hide" lay-filter="card_status" title="不显示注销卡" checked >
+             </div>
+
+
+            </div>
+        </form>
+
+
+    <table class="layui-table" id="card_info" lay-filter="card_info"></table>
+
+        <script type="text/html" id="copy">
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="copy" title="复制卡号"><i class="layui-icon">&#xe655;</i></a>
+        </script>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="remain" style="background-color: #00C5CD;">余额</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">充值</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund">退款</a>
+            <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="del">删卡</a>
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="update_label">标签</a>
+        </script>
+
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+    <script>
+        var table = layui.table,
+            $ = layui.jquery,
+            form = layui.form;
+
+
+        var card_status= $('input[name="card_status"]:checked').val();
+
+        table.render({
+            elem: '#card_info'
+            , height: 'full-250'
+            , cellMinWidth: '80'
+            , url: '/user/card_info/?card_status='+card_status //数据接口
+            , title: '卡列表'
+            , skin: 'line'
+            , limit:20
+            , limits:[20, 40, 60, 80, 100, 120, 140, 160, 180, 200]
+            , toolbar: '#search_remain' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , totalRow: true //开启合计行
+            , cols: [[ //表头
+                {type:'numbers'}
+                , {field: 'card_no', title: '卡号', align: 'center',  style:"mso-number-format:'\@';",}
+                , {field: '', toolbar:"#copy", width:50}
+                , {field: 'card_name', title: '卡名', align: 'center',}
+                , {field: 'expire', title: '有效期', align: 'center'}
+                , {field: 'cvv', title: '安全码', align: 'center',}
+                , {field: 'label', title: '标签', align: 'center',}
+                , {field: 'status', title: '状态', align: 'center', }
+                , {field: 'create_time', title: '建卡时间', align: 'center',}
+                , {field: 'remain', title: '交易记录', align: 'center', style: "color: red"}
+                , {fixed: 'right', width: 310, align: 'center', toolbar: '#barDemo'}
+            ]]
+            , id: 'card_info'
+            , page: true
+        });
+
+        form.on('radio(card_status)', function (data) {
+    　　　　if (data.value == 'show'){
+                table.reload("card_info", {
+                    url:'/user/card_info/?card_status=show',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                return false;
+            } else if (data.value == 'hide'){
+                table.reload("card_info", {
+                    url:'/user/card_info/?card_status=hide',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+                return false;
+            }
+　　　  });
+
+         /*根据搜索条件重载表格*/
+        var sub = $('#sub_card');
+        sub.on('click',function () {
+            var card_name = $('#card_name').val(),
+                card_num = $('#card_num').val(),
+                label = $('#label').val();
+            table.reload('card_info', {
+                page: {
+                  curr: 1 //重新从第 1 页开始
+                },where: {
+                    card_name: card_name,
+                    card_num: card_num,
+                    label:label,
+                  }
+              }, '/user/card_info/');
+            return false
+        });
+
+        table.on('rowDouble(card_info)', function(obj){
+        var data = obj.data;
+            layer.open({
+                type: 2
+                ,offset: 't' //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                ,skin:'layui-layer-demo'
+                ,id: 'layerUser'//防止重复弹出
+                ,title: '卡号为 ' + data.card_no + ' 的详细信息'
+                ,area: ['60%','80%']
+                ,anim: 2
+                ,shadeClose:true
+                ,content: '/user/one_card_detail/?card_no=' + data.card_no
+                ,btn: '关闭全部'
+                ,btnAlign: 'c' //按钮居中a
+                ,shade:  [0.8, '#393D49'] //弹框背景选项
+                ,success: function(layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#card_num").html(data.card_no);
+                    }
+
+              });
+
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+
+
+        table.on('tool(card_info)', function (obj) { //注：tool 是工具条事件名，test_all 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+
+            if (layEvent === 'refund') {
+                layer.prompt({title: '退款卡余额必须最少留$10'}, function(num, index){
+
+                    if (isNaN(num)){
+                        layer.msg('请输入数字!')
+                    }else{
+                        $.ajax({
+                            type : 'POST',
+                            url : '/user/refund/',
+                            data : {data:num,
+                                    card_no:data.card_no
+                            },
+                            dataType : 'json',
+                            beforeSend:function () {
+                            layer.load(2, {shade: false})
+                            },
+                            success : function(data) {
+                                // 成功提示框
+                                if (data.code == 0){
+                                    layer.closeAll();
+                                    layer.msg(data.msg, {
+                                    icon : 6,
+                                });
+
+                                }else if(data.code == 502){
+                                    layer.closeAll();
+                                    layer.msg(data.msg, {
+                                    icon : 5
+                                });
+                                }
+
+                            }
+                        });
+                    }
+                    layer.close(index);
+
+                });
+            } else if (layEvent === 'update_label'){
+                layui.layer.open({
+                    title: '修改卡号为 [ ' + data.card_no + ' ] 的标签',
+                    type: 2,
+                    anim: 3,
+                    area: ['20%', '28%'],//宽高
+                    shadeClose: true, //点击遮罩关闭
+                    content: '/user/update_label/?card_no='+data.card_no,
+                    success: function(layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#card_num").html(data.card_no);
+                        body.contents().find("#card_name").val(data.card_name);
+                    },
+                });
+                return false
+            }else if (layEvent === 'del') {
+                layer.confirm('确定删除卡号为:'+data.card_no+'的卡吗?如果卡内还有余额将退回到账户余额.', {title:'删卡信息提示!!!'}, function (index) {
+                     //删除对应行（tr）的DOM结构
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type : 'GET',
+                        url : '/user/delcard/?card_no=' + data.card_no,
+                        dataType : 'json',
+                        beforeSend:function () {
+                            layer.load(2, {shade: false})
+                            },
+                        success : function(data) {
+                            // 成功提示框
+                            if (data.code == 0){
+                                layer.closeAll();
+                                layer.msg(data.msg, {
+                                icon : 6,
+                            }, function () {
+                                    obj.del();
+                                });
+                            }else if(data.code == 502){
+                                layer.closeAll();
+                                layer.msg(data.msg, {
+                                icon : 5
+                            });
+                            }
+
+                        },
+                        error : function(data) {
+                            layer.closeAll();
+                            // 异常提示
+                            layer.msg(data.msg, {
+                                icon : 5
+                            });
+                        }
+                            });
+                    return false
+                });
+            }else if (layEvent === 'edit') {
+                layui.layer.open({
+                    title: '修改卡号为 [ ' + data.card_no + ' ] 的相关信息',
+                    type: 2,
+                    anim: 3,
+                    area: ['20%', '28%'],//宽高
+                    shadeClose: true, //点击遮罩关闭
+                    content: '/user/card_top/',
+                    success: function(layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#card_num").html(data.card_no);
+                        body.contents().find("#card_no").val(data.card_no);
+                    },
+                });
+                return false
+            } else if (layEvent === "remain"){
+                layer.open({
+                type: 2
+                ,offset: 'auto' //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                ,id: 'layerUser'//防止重复弹出
+                ,title: '卡号为 ' + data.card_no + ' 的余额信息'
+                ,area: ['400px','220px']
+                ,anim: 2
+                ,skin: 'layui-layer-lan'
+                ,shadeClose:true
+                ,content: '/user/one_card_remain/?card_name=' + data.card_name
+                ,btn: '关闭全部'
+                ,btnAlign: 'c' //按钮居中c
+                ,shade:  [0.8, '#393D49'] //弹框背景选项
+                ,success: function(layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#card_num").html(data.card_no);
+                    }
+
+              });
+            }else if (layEvent === 'copy'){
+                copyText(data.card_no.trim(), function () {
+                    layer.msg('复制卡号成功！')
+                })
+            }
+        });
+
+        function copyText(text, callback){ // text: 要复制的内容， callback: 回调
+            var tag = document.createElement('input');
+            tag.setAttribute('id', 'cp_hgz_input');
+            tag.value = text;
+            document.getElementsByTagName('body')[0].appendChild(tag);
+            document.getElementById('cp_hgz_input').select();
+            document.execCommand('copy');
+            document.getElementById('cp_hgz_input').remove();
+            if(callback) {callback(text)}
+        }
+    </script>
+</body>
+</html>

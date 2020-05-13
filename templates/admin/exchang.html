@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style>
+    .divForm{
+        width: 500px;
+        height: 400px;
+        top: 50%;
+        left: 50%;
+        margin-bottom: 300px;
+        margin-top: 100px;
+        margin-left: 36%;
+    }
+</style>
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>系统设置</cite></a>
+          <a><cite>汇率配置</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body">
+
+        <div class="divForm">
+        <form class="layui-form layui-form-pane" lay-filter="example" id="example" enctype="multipart/form-data">
+        <div class="layui-form-item">
+            <label class="layui-form-label">汇  率:</label>
+            <div class="layui-input-inline">
+                <input type="number" name="exchange"  placeholder="设置的汇率" autocomplete="off"
+                       class="layui-input" id="exchange">
+            </div>
+            <div class="layui-form-mid layui-word-aux">当前汇率:{{ ex_change }}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">波动溢价:</label>
+            <div class="layui-input-inline">
+                <input type="number" name="ex_range" placeholder="汇率波动溢价" autocomplete="off"
+                       class="layui-input" id="ex_range">
+            </div>
+            <div class="layui-form-mid layui-word-aux">当前波动溢价:{{ ex_range }}</div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">手续费:</label>
+            <div class="layui-input-inline">
+                <input type="number" name="hand"  placeholder="手续费(例: 0.03)" autocomplete="off"
+                       class="layui-input" id="hand">
+            </div>
+            <div class="layui-form-mid layui-word-aux">当前手续费:{{ hand }}</div>
+        </div>
+
+        <hr class="layui-bg-black">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">美元充值手续费:</label>
+            <div class="layui-input-inline">
+                <input type="number" name="dollar_hand"  placeholder="手续费(例: 0.04)" autocomplete="off"
+                       class="layui-input" id="dollar_hand">
+            </div>
+            <div class="layui-form-mid layui-word-aux">当前美元手续费:{{ dollar_hand }}</div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="sub" type="submit">立即提交</button>
+            </div>
+        </div>
+    </form>
+
+        </div>
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+    <script>
+        var form = layui.form;
+      //监听提交
+        form.on('submit(formDemo)', function(data){
+            var data_info = {data:JSON.stringify(data.field)};
+            var $ = layui.jquery;
+
+            $.ajax({
+				type : 'POST',
+				url : '/admin/ex_change/',
+				data : data_info,
+				dataType : 'json',
+				success : function(data) {
+			    	console.log(data.code);
+					// 成功提示框
+                    if (data.code == 0){
+                        layer.msg(data.msg, {
+						icon : 1,
+					});
+					 layer.closeAll('iframe'); //关闭弹框
+                    }else if(data.code == 502){
+                        layer.msg(data.msg, {
+						icon : 2
+					});
+                    }
+				},
+				error : function(data) {
+					// 异常提示
+					layer.msg('出现网络故障', {
+						icon : 5
+					});
+					layer.closeAll('iframe'); //关闭弹框
+				}
+			});
+			return false;
+            });
+</script>
+</body>
+</html>

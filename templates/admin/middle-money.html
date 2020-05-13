@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/x-admin.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+</head>
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>中介管理</cite></a>
+          <a><cite>中介提成</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+
+    <div class="x-body">
+        <blockquote class="layui-elem-quote">中介费用每周三凌晨自动生成，结算周期为上周三到每周二</blockquote>
+        <table class="layui-show" id="middle_money" lay-filter="middle_money"></table>
+            <script type="text/html" id="middle_money_bar">
+                <a class="layui-btn layui-btn-xs" lay-event="payed" id="pay">确认支付</a>
+            </script>
+
+    </div>
+    <script src="/static/layui/layui.all.js" charset="utf-8"></script>
+    <script>
+        var table = layui.table;
+
+        table.render({
+            elem: '#middle_money'
+            , height: 'full-280'
+            , cellMinWidth: '80'
+            , url: '/admin/middle_money' //数据接口
+            , title: '中介费统计表'
+            , limit: 50
+            , limits: [50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
+            , toolbar: "r" //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , totalRow: true //开启合计行
+            , cols: [[ //表头
+                {type: 'numbers'}
+                , {field: 'name', title: '中介名称', align: 'center',totalRowText: '合计：'}
+                , {field: 'start_time', title: '开始时间(周三)', align: 'center'}
+                , {field: 'end_time', title: '结束时间(周二)', align: 'center'}
+                , {field: 'card_num', title: '开卡量', align: 'center', sort: true, totalRow: true}
+                , {field: 'create_price', title: '开卡费', align: 'center', sort: true, totalRow: true}
+                , {field: 'create_time', title: '系统统计时间', align: 'center', }
+                , {field: 'sum_money', title: '提成总额', align: 'center', style: "color:red;", sort: true, totalRow: true}
+                , {field: 'pay_status', title: '是否支付提成', align: 'center'}
+                , {field: 'pay_time', title: '终端确认时间', align: 'center'}
+                , {fixed: 'right', width: 160, align: 'center', toolbar: '#middle_money_bar'}
+            ]]
+            , id: 'card_info'
+            , page: true
+            , done: function (res, curr, count) {
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].pay_status == '已确认') {
+                        $('table tbody tr td a[id=pay]').eq(i).css('display', 'none')
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

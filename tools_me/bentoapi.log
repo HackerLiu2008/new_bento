@@ -1,0 +1,9 @@
+2020-05-11 12:35:38,591 :: ERROR :: 创建卡失败: HTTPSConnectionPool(host='api.bentoforbusiness.com', port=443): Read timed out. (read timeout=14)
+2020-05-11 12:35:59,625 :: ERROR :: 创建卡失败: HTTPSConnectionPool(host='api.bentoforbusiness.com', port=443): Read timed out. (read timeout=14)
+2020-05-12 11:33:09,156 :: WARNING :: Expecting value: line 1 column 1 (char 0)
+2020-05-12 12:20:37,892 :: WARNING :: Expecting value: line 1 column 1 (char 0)
+2020-05-12 12:26:56,688 :: WARNING :: HTTPSConnectionPool(host='api.bentoforbusiness.com', port=443): Max retries exceeded with url: /cards/1121012 (Caused by ReadTimeoutError("HTTPSConnectionPool(host='api.bentoforbusiness.com', port=443): Read timed out. (read timeout=14)"))
+2020-05-12 17:12:53,213 :: ERROR :: 交易记录请求超时！HTTPSConnectionPool(host='api.bentoforbusiness.com', port=443): Read timed out.
+2020-05-13 16:17:27,611 :: WARNING :: HTTPSConnectionPool(host='api.bentoforbusiness.com', port=443): Max retries exceeded with url: /cards/1121851 (Caused by ReadTimeoutError("HTTPSConnectionPool(host='api.bentoforbusiness.com', port=443): Read timed out. (read timeout=14)"))
+2020-05-13 16:18:04,787 :: WARNING :: Expecting value: line 1 column 1 (char 0)
+2020-05-13 16:18:20,087 :: WARNING :: Expecting value: line 1 column 1 (char 0)
