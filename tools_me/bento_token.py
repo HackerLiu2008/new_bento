@@ -8,8 +8,8 @@ from tools_me.redis_tools import RedisTool
 
 
 class Key(object):
-    ACCESSKEY = "4IEqK6pqfbC6CH8uf4oSXA"
-    SECRETKEY = "XQH2NVKqTOdbKO3jIf1F1g"
+    ACCESSKEY = "4IEqKC6CH8uf4oSXA"
+    SECRETKEY = "XQH2OdbKO3jIf1F1g"
     URL = "https://api.bentoforbusiness.com/"
 
 
